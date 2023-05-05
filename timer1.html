@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Timer</title>
+	<style>
+        h1 {
+	text-align: center;
+}
+
+form {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	margin-top: 20px;
+}
+
+form label, form input[type="button"] {
+	margin: 0 10px;
+}
+
+audio {
+	display: none;
+}
+
+    </style>
+
+</head>
+<body>
+	<h1>Timer</h1>
+	<form>
+		<label for="hours">Hours:</label>
+		<input type="number" id="hours" min="0" max="24">
+		<label for="minutes">Minutes:</label>
+		<input type="number" id="minutes" min="0" max="59">
+		<label for="seconds">Seconds:</label>
+		<input type="number" id="seconds" min="0" max="59">
+		<input type="button" value="Start" onclick="startTimer()">
+	</form>
+	<audio id="alarm">
+		<source src="alarm.mp3" type="audio/mp3">
+		<source src="alarm.ogg" type="audio/ogg">
+	</audio>
+	<script src="script.js"></script>
+</body>
+</html>
+<script>
+    let timer;
+
+function startTimer() {
+	let hours = document.getElementById("hours").value;
+	let minutes = document.getElementById("minutes").value;
+	let seconds = document.getElementById("seconds").value;
+
+	let totalSeconds = hours * 3600 + minutes * 60 + seconds * 1;
+
+	if (totalSeconds <= 0) {
+		alert("Please enter a valid time.");
+		return;
+	}
+
+	timer = setInterval(() => {
+		totalSeconds--;
+		let hours = Math.floor(totalSeconds / 3600);
+		let minutes = Math.floor((totalSeconds - hours * 3600) / 60);
+		let seconds = totalSeconds % 60;
+
+		document.getElementById("hours").value = hours;
+		document.getElementById("minutes").value = minutes;
+		document.getElementById("seconds").value = seconds;
+
+		if (totalSeconds <= 0) {
+			clearInterval(timer);
+			playAlarm();
+			alert("Time's up!");
+		}
+	}, 1000);
+}
+
+function playAlarm() {
+	let alarm = document.getElementById("alarm");
+	alarm.play();
+}
+
+</script>
